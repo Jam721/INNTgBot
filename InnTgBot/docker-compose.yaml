@@ -2,13 +2,10 @@
 
 services:
   inn-tg-bot:
-    container_name: inn-tg-bot
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - Telegram__Token=${TELEGRAM_BOT_TOKEN}
       - Dadata__Token=${DADATA_API_TOKEN}
-      - DOTNET_ENVIRONMENT=Production
+      - DOTNET_ENVIRONMENT=${DOTNET_ENVIRONMENT}
     restart: unless-stopped
