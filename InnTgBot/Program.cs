@@ -8,6 +8,14 @@ var builder = Host.CreateApplicationBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
+Console.WriteLine($"Telegram token: {configuration["Telegram:Token"]}");
+Console.WriteLine($"Dadata token: {configuration["Dadata:Token"]}");
+
+if (string.IsNullOrEmpty(configuration["Telegram:Token"]))
+{
+    throw new Exception("Telegram token is missing!");
+}
+
 // Сервис на фоне
 services.AddHostedService<TelegramBotBackgroundService>();
 
