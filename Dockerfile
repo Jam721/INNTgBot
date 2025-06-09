@@ -1,19 +1,20 @@
 ﻿FROM mcr.microsoft.com/dotnet/runtime:9.0 AS base
-USER $APP_UID
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["InnTgBot/InnTgBot.csproj", "InnTgBot/"]
-RUN dotnet restore "InnTgBot/InnTgBot.csproj"
+
+# Копируем только файл проекта сначала
+COPY ["InnTgBot.csproj", "."]
+RUN dotnet restore "InnTgBot.csproj"
+
+# Копируем остальные файлы
 COPY . .
-WORKDIR "/src/InnTgBot"
-RUN dotnet build "InnTgBot.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+RUN dotnet build "InnTgBot.csproj" -c Release -o /app/build
 
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "InnTgBot.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "InnTgBot.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
