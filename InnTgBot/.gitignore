@@ -30,11 +30,6 @@ secrets.json
 .env
 docker-compose.override.yml
 
-Dockerfile
-docker-compose.yml
-docker-compose.*.yml
-.dockerignore
-
 *.testsettings
 *.testlog
 
