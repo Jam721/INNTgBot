@@ -8,6 +8,8 @@ var builder = Host.CreateApplicationBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
+configuration.AddEnvironmentVariables();
+
 Console.WriteLine($"Telegram token: {configuration["Telegram:Token"]}");
 Console.WriteLine($"Dadata token: {configuration["Dadata:Token"]}");
 

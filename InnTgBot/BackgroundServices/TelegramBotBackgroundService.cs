@@ -39,6 +39,16 @@ public class TelegramBotBackgroundService(
     /// </remarks>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        Console.WriteLine($"Telegram token: {_telegramOptions.Token}");
+        Console.WriteLine($"Token length: {_telegramOptions.Token?.Length}");
+        
+        if (string.IsNullOrWhiteSpace(_telegramOptions.Token) || 
+            !_telegramOptions.Token.Contains(':') || 
+            _telegramOptions.Token.Length < 46)
+        {
+            throw new ArgumentException("Invalid Telegram token format");
+        }
+        
         var botClient = new TelegramBotClient(_telegramOptions.Token);
 
         while (!stoppingToken.IsCancellationRequested)
