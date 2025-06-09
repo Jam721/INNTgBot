@@ -5,7 +5,7 @@ using Telegram.Bot.Types.Enums;
 
 namespace InnTgBot.Commands;
 
-public class StartCommand : ICommandHandler
+public class StartCommand(ILastMessageService lastMessageService) : ICommandHandler
 {
     public string CommandName => "/start";
 
@@ -40,5 +40,7 @@ public class StartCommand : ICommandHandler
             text: response,
             parseMode: ParseMode.Markdown,
             cancellationToken: cancellationToken);
+        
+        await lastMessageService.StoreLastMessage(message.Chat.Id, response);
     }
 }

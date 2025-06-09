@@ -1,5 +1,6 @@
 using InnTgBot.Options;
 using InnTgBot.Services;
+using InnTgBot.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -9,7 +10,8 @@ namespace InnTgBot.BackgroundServices;
 
 public class TelegramBotBackgroundService(
     IOptions<TelegramOptions> telegramOptions,
-    CommandRouter router)
+    CommandRouter router,
+    ILastMessageService lastMessageService)
     : BackgroundService
 {
     private readonly TelegramOptions _telegramOptions = telegramOptions.Value;
@@ -40,11 +42,15 @@ public class TelegramBotBackgroundService(
             await router.HandleCommandAsync(botClient, message, cancellationToken);
             return;
         }
-
+        
+        const string text = "Я не понимаю твое сообщение, чтобы узнать как пользоваться моим функционалом напиши /help";
+        
         await botClient.SendMessage(
             chatId: chatId,
-            text: "Я не понимаю твое сообщение, чтобы узнать как пользоваться моим функционалом напиши /help",
+            text: text,
             cancellationToken: cancellationToken);
+        
+        await lastMessageService.StoreLastMessage(message.Chat.Id, text);
     }
 
     private Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)

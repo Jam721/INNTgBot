@@ -6,11 +6,13 @@ namespace InnTgBot.Services;
 
 public class CommandRouter
 {
+    private readonly ILastMessageService _lastMessageService;
     private readonly Dictionary<string, ICommandHandler> _handlers;
 
 
-    public CommandRouter(IEnumerable<ICommandHandler> handlers)
+    public CommandRouter(IEnumerable<ICommandHandler> handlers, ILastMessageService lastMessageService)
     {
+        _lastMessageService = lastMessageService;
         _handlers = handlers.ToDictionary(h => h.CommandName);
     }
     
@@ -32,6 +34,8 @@ public class CommandRouter
                 chatId: chatId,
                 text: "Неизвестная команда",
                 cancellationToken: cancellationToken);
+            
+            await _lastMessageService.StoreLastMessage(message.Chat.Id, "Неизвестная команда");
         }
     }
 }
