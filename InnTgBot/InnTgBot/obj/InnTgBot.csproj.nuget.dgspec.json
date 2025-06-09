@@ -49,6 +49,14 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "DaData.Client": {
+              "target": "Package",
+              "version": "[0.1.8, )"
+            },
+            "Dadata": {
+              "target": "Package",
+              "version": "[25.4.1, )"
+            },
             "Microsoft.Extensions.Hosting": {
               "target": "Package",
               "version": "[9.0.3, )"

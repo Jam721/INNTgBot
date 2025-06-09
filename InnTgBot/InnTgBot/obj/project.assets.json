@@ -2,6 +2,27 @@
   "version": 3,
   "targets": {
     "net9.0": {
+      "Dadata/25.4.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Dadata.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Dadata.dll": {}
+        }
+      },
+      "DaData.Client/0.1.8": {
+        "type": "package",
+        "dependencies": {
+          "RestSharp": "106.6.10"
+        },
+        "compile": {
+          "lib/net45/DaData.Client.dll": {}
+        },
+        "runtime": {
+          "lib/net45/DaData.Client.dll": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/9.0.3": {
         "type": "package",
         "dependencies": {
@@ -591,6 +612,19 @@
           }
         }
       },
+      "RestSharp/106.6.10": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/RestSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/RestSharp.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.Diagnostics.EventLog/9.0.3": {
         "type": "package",
         "compile": {
@@ -653,6 +687,31 @@
     }
   },
   "libraries": {
+    "Dadata/25.4.1": {
+      "sha512": "307mdQy8mNmpWCQjXY8tLrEQ4FJDmQEHl9VCfAlrBev/UgbQuydcW27g/75Sn/YHi9rjYYh/D7Vggdy7vjJ84Q==",
+      "type": "package",
+      "path": "dadata/25.4.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "dadata.25.4.1.nupkg.sha512",
+        "dadata.nuspec",
+        "lib/netstandard2.0/Dadata.dll"
+      ]
+    },
+    "DaData.Client/0.1.8": {
+      "sha512": "XpRhff9TX4AbBff5nyaQWGYPmPeRnkkOR9POo2QI6Rn9cqLIRVEmESPAy97M3s8eMF/FXoBMqaKcK/wWMqKT+w==",
+      "type": "package",
+      "path": "dadata.client/0.1.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "dadata.client.0.1.8.nupkg.sha512",
+        "dadata.client.nuspec",
+        "lib/net45/DaData.Client.dll"
+      ]
+    },
     "Microsoft.Extensions.Configuration/9.0.3": {
       "sha512": "RIEeZxWYm77+OWLwgik7DzSVSONjqkmcbuCb1koZdGAV7BgOUWnLz80VMyHZMw3onrVwFCCMHBBdruBPuQTvkg==",
       "type": "package",
@@ -1521,6 +1580,21 @@
         "packageIcon.png"
       ]
     },
+    "RestSharp/106.6.10": {
+      "sha512": "x1FM32hjnVOIn+DKtCs2Y4Q2DCUE5KW08NUXUd4GjgKjE+5PE0F6e9XfUg7nILo05M0TA/HRkRD/SeQ8+duOUA==",
+      "type": "package",
+      "path": "restsharp/106.6.10",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net452/RestSharp.dll",
+        "lib/net452/RestSharp.xml",
+        "lib/netstandard2.0/RestSharp.dll",
+        "lib/netstandard2.0/RestSharp.xml",
+        "restsharp.106.6.10.nupkg.sha512",
+        "restsharp.nuspec"
+      ]
+    },
     "System.Diagnostics.EventLog/9.0.3": {
       "sha512": "0nDJBZ06DVdTG2vvCZ4XjazLVaFawdT0pnji23ISX8I8fEOlRJyzH2I0kWiAbCtFwry2Zir4qE4l/GStLATfFw==",
       "type": "package",
@@ -1650,6 +1724,8 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "DaData.Client >= 0.1.8",
+      "Dadata >= 25.4.1",
       "Microsoft.Extensions.Hosting >= 9.0.3",
       "Newtonsoft.Json >= 13.0.3",
       "Telegram.Bot >= 22.5.1"
@@ -1704,6 +1780,14 @@
       "net9.0": {
         "targetAlias": "net9.0",
         "dependencies": {
+          "DaData.Client": {
+            "target": "Package",
+            "version": "[0.1.8, )"
+          },
+          "Dadata": {
+            "target": "Package",
+            "version": "[25.4.1, )"
+          },
           "Microsoft.Extensions.Hosting": {
             "target": "Package",
             "version": "[9.0.3, )"
@@ -1736,5 +1820,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.202/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'DaData.Client 0.1.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net9.0'. This package may not be fully compatible with your project.",
+      "libraryId": "DaData.Client",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    }
+  ]
 }

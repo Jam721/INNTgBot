@@ -5,10 +5,22 @@ using Telegram.Bot.Types.Enums;
 
 namespace InnTgBot.Commands;
 
+/// <summary>
+/// Команда повторения последнего действия
+/// </summary>
 public class LastCommand(ILastMessageService lastMessageService) : ICommandHandler
 {
+    /// <summary>
+    /// Системное имя команды: /last
+    /// </summary>
     public string CommandName => "/last";
     
+    /// <summary>
+    /// Повторяет последнее сообщение, отправленное ботом в чат
+    /// </summary>
+    /// <param name="botClient">API клиент Telegram</param>
+    /// <param name="message">Входящее сообщение</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     public async Task Execute(
         ITelegramBotClient botClient, 
         Message message, 

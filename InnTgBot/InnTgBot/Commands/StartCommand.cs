@@ -5,10 +5,22 @@ using Telegram.Bot.Types.Enums;
 
 namespace InnTgBot.Commands;
 
+/// <summary>
+/// Стартовая команда при запуске бота
+/// </summary>
 public class StartCommand(ILastMessageService lastMessageService) : ICommandHandler
 {
+    /// <summary>
+    /// Системное имя команды: /start
+    /// </summary>
     public string CommandName => "/start";
 
+    /// <summary>
+    /// Отправляет приветственное сообщение и инструкции
+    /// </summary>
+    /// <param name="botClient">API клиент Telegram</param>
+    /// <param name="message">Входящее сообщение</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     public async Task Execute(
         ITelegramBotClient botClient, 
         Message message, 

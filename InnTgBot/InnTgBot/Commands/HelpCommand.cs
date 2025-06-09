@@ -5,10 +5,22 @@ using Telegram.Bot.Types.Enums;
 
 namespace InnTgBot.Commands;
 
+/// <summary>
+/// Команда вывода справочной информации
+/// </summary>
 public class HelpCommand(ILastMessageService lastMessageService) : ICommandHandler
 {
+    /// <summary>
+    /// Системное имя команды: /help
+    /// </summary>
     public string CommandName => "/help";
 
+    /// <summary>
+    /// Отправляет в чат список доступных команд
+    /// </summary>
+    /// <param name="botClient">API клиент Telegram</param>
+    /// <param name="message">Входящее сообщение</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     public async Task Execute(
         ITelegramBotClient botClient, 
         Message message, 

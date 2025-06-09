@@ -1,0 +1,14 @@
+﻿version: '3.8'
+
+services:
+  inn-tg-bot:
+    container_name: inn-tg-bot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - Telegram__Token=${TELEGRAM_BOT_TOKEN}
+      - Dadata__Token=${DADATA_API_TOKEN}
+      - DOTNET_ENVIRONMENT=Production
+    restart: unless-stopped

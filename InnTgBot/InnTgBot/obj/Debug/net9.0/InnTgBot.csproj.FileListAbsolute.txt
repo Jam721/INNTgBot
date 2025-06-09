@@ -49,3 +49,6 @@ E:\INNTgBot\InnTgBot\InnTgBot\obj\Debug\net9.0\refint\InnTgBot.dll
 E:\INNTgBot\InnTgBot\InnTgBot\obj\Debug\net9.0\InnTgBot.pdb
 E:\INNTgBot\InnTgBot\InnTgBot\obj\Debug\net9.0\InnTgBot.genruntimeconfig.cache
 E:\INNTgBot\InnTgBot\InnTgBot\obj\Debug\net9.0\ref\InnTgBot.dll
+E:\INNTgBot\InnTgBot\InnTgBot\bin\Debug\net9.0\Dadata.dll
+E:\INNTgBot\InnTgBot\InnTgBot\bin\Debug\net9.0\DaData.Client.dll
+E:\INNTgBot\InnTgBot\InnTgBot\bin\Debug\net9.0\RestSharp.dll
