@@ -1,6 +1,6 @@
-﻿using InnTgBot.Info;
+﻿using TgBot.Info;
 
-namespace InnTgBot.Services.Interfaces;
+namespace TgBot.Services.Interfaces;
 
 /// <summary>
 /// Предоставляет методы для получения информации о компаниях и ИП по ИНН

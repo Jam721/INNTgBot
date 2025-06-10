@@ -1,8 +1,8 @@
-using InnTgBot.BackgroundServices;
-using InnTgBot.Commands;
-using InnTgBot.Options;
-using InnTgBot.Services;
-using InnTgBot.Services.Interfaces;
+using TgBot.BackgroundServices;
+using TgBot.Commands;
+using TgBot.Options;
+using TgBot.Services;
+using TgBot.Services.Interfaces;
 
 var builder = Host.CreateApplicationBuilder(args);
 var services = builder.Services;

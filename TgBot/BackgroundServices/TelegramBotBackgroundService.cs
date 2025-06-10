@@ -1,12 +1,12 @@
-using InnTgBot.Options;
-using InnTgBot.Services;
-using InnTgBot.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
+using TgBot.Options;
+using TgBot.Services;
+using TgBot.Services.Interfaces;
 
-namespace InnTgBot.BackgroundServices;
+namespace TgBot.BackgroundServices;
 
 /// <summary>
 /// Фоновый сервис для обработки входящих сообщений Telegram бота

@@ -1,12 +1,12 @@
 ﻿using System.Globalization;
 using Dadata;
 using Dadata.Model;
-using InnTgBot.Info;
-using InnTgBot.Options;
-using InnTgBot.Services.Interfaces;
 using Microsoft.Extensions.Options;
+using TgBot.Info;
+using TgBot.Options;
+using TgBot.Services.Interfaces;
 
-namespace InnTgBot.Services;
+namespace TgBot.Services;
 
 /// <summary>
 /// Сервис для получения информации о компаниях через API Dadata

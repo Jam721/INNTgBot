@@ -1,4 +1,4 @@
-﻿namespace InnTgBot.Info;
+﻿namespace TgBot.Info;
 
 /// <summary>
 /// Представляет информацию о юридическом лице или индивидуальном предпринимателе

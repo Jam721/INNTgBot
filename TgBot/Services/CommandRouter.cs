@@ -1,8 +1,8 @@
-﻿using InnTgBot.Services.Interfaces;
-using Telegram.Bot;
+﻿using Telegram.Bot;
 using Telegram.Bot.Types;
+using TgBot.Services.Interfaces;
 
-namespace InnTgBot.Services;
+namespace TgBot.Services;
 
 /// <summary>
 /// Маршрутизатор команд для обработки входящих сообщений

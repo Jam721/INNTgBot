@@ -1,12 +1,12 @@
 ﻿using System.Text;
-using InnTgBot.Info;
-using InnTgBot.Services.Interfaces;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using TgBot.Info;
+using TgBot.Services.Interfaces;
 
-namespace InnTgBot.Commands;
+namespace TgBot.Commands;
 
 /// <summary>
 /// Обработчик команды /inn для поиска информации о компаниях по ИНН

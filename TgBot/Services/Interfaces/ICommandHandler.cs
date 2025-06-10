@@ -1,7 +1,7 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace InnTgBot.Services.Interfaces;
+namespace TgBot.Services.Interfaces;
 
 /// <summary>
 /// Интерфейс для обработчиков команд бота

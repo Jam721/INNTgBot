@@ -1,4 +1,4 @@
-﻿namespace InnTgBot.Options;
+﻿namespace TgBot.Options;
 
 /// <summary>
 /// Конфигурационные параметры для сервиса Dadata

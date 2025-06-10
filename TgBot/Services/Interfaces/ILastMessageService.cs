@@ -1,4 +1,4 @@
-﻿namespace InnTgBot.Services.Interfaces;
+﻿namespace TgBot.Services.Interfaces;
 
 /// <summary>
 /// Сервис для хранения и получения последних сообщений бота

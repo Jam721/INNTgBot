@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
-using InnTgBot.Services.Interfaces;
+using TgBot.Services.Interfaces;
 
-namespace InnTgBot.Services;
+namespace TgBot.Services;
 
 /// <summary>
 /// Сервис для хранения последнего сообщения в чате

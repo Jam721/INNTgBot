@@ -1,9 +1,9 @@
-﻿using InnTgBot.Services.Interfaces;
-using Telegram.Bot;
+﻿using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using TgBot.Services.Interfaces;
 
-namespace InnTgBot.Commands;
+namespace TgBot.Commands;
 
 /// <summary>
 /// Команда вывода справочной информации
