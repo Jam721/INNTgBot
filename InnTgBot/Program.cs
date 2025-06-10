@@ -3,7 +3,6 @@ using InnTgBot.Commands;
 using InnTgBot.Options;
 using InnTgBot.Services;
 using InnTgBot.Services.Interfaces;
-using Microsoft.AspNetCore.Builder;
 
 var builder = Host.CreateApplicationBuilder(args);
 var services = builder.Services;
@@ -48,6 +47,6 @@ webApp.MapGet("/", () => {
     Console.WriteLine($"[{DateTime.UtcNow}] Health check passed");
     return "Bot is running";
 });
-webApp.Run("http://0.0.0.0:8080");
+webApp.Run();
 
 await hostTask;
