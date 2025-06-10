@@ -50,15 +50,29 @@ public class TelegramBotBackgroundService(
 
         try
         {
+            var offset = 0;
             while (!stoppingToken.IsCancellationRequested)
             {
-                await botClient.ReceiveAsync(
-                    updateHandler: HandleUpdateAsync, 
-                    errorHandler: HandleErrorAsync, 
-                    cancellationToken: stoppingToken);
+                try
+                {
+                    var updates = await botClient.GetUpdates(
+                        offset: offset,
+                        timeout: 60, // Увеличиваем таймаут
+                        cancellationToken: stoppingToken
+                    );
+            
+                    foreach (var update in updates)
+                    {
+                        await HandleUpdateAsync(botClient, update, stoppingToken);
+                        offset = update.Id + 1;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка: {ex.Message}");
+                    await Task.Delay(2000, stoppingToken);
+                }
             }
-        
-            await Task.Delay(1000, stoppingToken);
         }
         catch (Exception ex)
         {

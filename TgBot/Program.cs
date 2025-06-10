@@ -47,6 +47,13 @@ webApp.MapGet("/", () => {
     Console.WriteLine($"[{DateTime.UtcNow}] Health check passed");
     return "Bot is running";
 });
+
+webApp.MapGet("/health", () => 
+{
+    Console.WriteLine($"[{DateTime.UtcNow}] Health check passed");
+    return Results.Ok("Bot is alive");
+});
+
 webApp.Run();
 
 await hostTask;
