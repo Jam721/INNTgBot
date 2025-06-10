@@ -4,56 +4,58 @@ using TgBot.Options;
 using TgBot.Services;
 using TgBot.Services.Interfaces;
 
-var builder = Host.CreateApplicationBuilder(args);
-var services = builder.Services;
+var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 configuration.AddEnvironmentVariables();
 
-Console.WriteLine($"Telegram token: {configuration["Telegram:Token"]}");
-Console.WriteLine($"Dadata token: {configuration["Dadata:Token"]}");
+// Регистрация сервисов
+builder.Services.AddSingleton<CommandRouter>();
+builder.Services.AddSingleton<ICompanyInfoService, CompanyService>();
+builder.Services.AddSingleton<ILastMessageService, LastMessageService>();
 
-if (string.IsNullOrEmpty(configuration["Telegram:Token"]))
-{
-    throw new Exception("Telegram token is missing!");
-}
+// Регистрация команд
+builder.Services.AddSingleton<ICommandHandler, StartCommand>();
+builder.Services.AddSingleton<ICommandHandler, HelpCommand>();
+builder.Services.AddSingleton<ICommandHandler, HelloCommand>();
+builder.Services.AddSingleton<ICommandHandler, InnCommand>();
+builder.Services.AddSingleton<ICommandHandler, LastCommand>();
 
-// Сервис на фоне
-services.AddHostedService<TelegramBotBackgroundService>();
+// Конфигурация
+builder.Services.Configure<TelegramOptions>(configuration.GetSection(TelegramOptions.Telegram));
+builder.Services.Configure<DadataOptions>(configuration.GetSection(DadataOptions.Dadata));
 
-// Роутер команд
-services.AddSingleton<CommandRouter>();
+// Фоновый сервис
+builder.Services.AddHostedService<TelegramBotBackgroundService>();
 
-// Сервисы
-services.AddSingleton<ICompanyInfoService, CompanyService>();
-services.AddSingleton<ILastMessageService, LastMessageService>();
+var app = builder.Build();
 
-// Наши команды
-services.AddSingleton<ICommandHandler, StartCommand>();
-services.AddSingleton<ICommandHandler, HelpCommand>();
-services.AddSingleton<ICommandHandler, HelloCommand>();
-services.AddSingleton<ICommandHandler, InnCommand>();
-services.AddSingleton<ICommandHandler, LastCommand>();
-
-// Конфиги
-services.Configure<TelegramOptions>(configuration.GetSection(TelegramOptions.Telegram));
-services.Configure<DadataOptions>(configuration.GetSection(DadataOptions.Dadata));
-
-var host = builder.Build();
-var hostTask = host.RunAsync();
-
-var webApp = WebApplication.CreateBuilder(args).Build();
-webApp.MapGet("/", () => {
-    Console.WriteLine($"[{DateTime.UtcNow}] Health check passed");
+// Health check эндпоинты
+app.MapGet("/", () => {
+    Console.WriteLine($"[{DateTime.UtcNow}] Root health check");
     return "Bot is running";
 });
 
-webApp.MapGet("/health", () => 
+app.MapGet("/health", () => 
 {
     Console.WriteLine($"[{DateTime.UtcNow}] Health check passed");
     return Results.Ok("Bot is alive");
 });
 
-webApp.Run();
+// Ключевое добавление: keep-alive механизм
+app.Lifetime.ApplicationStarted.Register(() => 
+{
+    _ = Task.Run(async () =>
+    {
+        while (!app.Lifetime.ApplicationStopping.IsCancellationRequested)
+        {
+            Console.WriteLine($"[{DateTime.UtcNow}] Keep-alive heartbeat");
+            await Task.Delay(TimeSpan.FromMinutes(7), app.Lifetime.ApplicationStopping);
+        }
+    });
+});
 
-await hostTask;
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+Console.WriteLine($"Application listening on port: {port}");
+
+app.Run();

@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: inn-tg-bot
+    runtime: docker
+    env: docker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: DOTNET_ENVIRONMENT
+        value: Production
+      - key: Telegram__Token
+        fromGroup: telegram-secrets
+      - key: Dadata__Token
+        fromGroup: dadata-secrets
+      - key: PORT
+        value: 10000  # Render использует этот порт
+    port: 10000
+    healthCheckPath: /health

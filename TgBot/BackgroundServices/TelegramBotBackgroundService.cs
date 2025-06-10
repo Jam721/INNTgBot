@@ -47,36 +47,37 @@ public class TelegramBotBackgroundService(
         }
         
         var botClient = new TelegramBotClient(_telegramOptions.Token);
-
-        try
+        var me = await botClient.GetMe(cancellationToken: stoppingToken);
+        Console.WriteLine($"Bot started: @{me.Username}");
+    
+        var lastUpdateId = 0;
+    
+        while (!stoppingToken.IsCancellationRequested)
         {
-            var offset = 0;
-            while (!stoppingToken.IsCancellationRequested)
+            try
             {
-                try
+                var updates = await botClient.GetUpdates(
+                    offset: lastUpdateId + 1,
+                    timeout: 30,
+                    cancellationToken: stoppingToken
+                );
+
+                foreach (var update in updates)
                 {
-                    var updates = await botClient.GetUpdates(
-                        offset: offset,
-                        timeout: 60, // Увеличиваем таймаут
-                        cancellationToken: stoppingToken
-                    );
-            
-                    foreach (var update in updates)
-                    {
-                        await HandleUpdateAsync(botClient, update, stoppingToken);
-                        offset = update.Id + 1;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Ошибка: {ex.Message}");
-                    await Task.Delay(2000, stoppingToken);
+                    await HandleUpdateAsync(botClient, update, stoppingToken);
+                    lastUpdateId = update.Id;
                 }
             }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
+            catch (ApiRequestException ex) when (ex.Message.Contains("terminated by other getUpdates"))
+            {
+                Console.WriteLine("GetUpdates conflict, waiting 5s...");
+                await Task.Delay(5000, stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+                await Task.Delay(2000, stoppingToken);
+            }
         }
     }
 
