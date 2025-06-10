@@ -39,10 +39,12 @@ app.MapGet("/", () => {
 app.MapGet("/health", () => 
 {
     Console.WriteLine($"[{DateTime.UtcNow}] Health check passed");
-    return Results.Ok("Bot is alive");
+    return Results.Ok(new {
+        status = "OK",
+        time = DateTime.UtcNow
+    });
 });
 
-// Ключевое добавление: keep-alive механизм
 app.Lifetime.ApplicationStarted.Register(() => 
 {
     _ = Task.Run(async () =>
@@ -56,6 +58,7 @@ app.Lifetime.ApplicationStarted.Register(() =>
 });
 
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-Console.WriteLine($"Application listening on port: {port}");
+app.Urls.Add($"http://*:{port}");
+Console.WriteLine($"Using port: {port}");
 
 app.Run();

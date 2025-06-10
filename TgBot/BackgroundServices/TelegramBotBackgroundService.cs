@@ -51,11 +51,19 @@ public class TelegramBotBackgroundService(
         Console.WriteLine($"Bot started: @{me.Username}");
     
         var lastUpdateId = 0;
+        var isProcessing = false;
     
         while (!stoppingToken.IsCancellationRequested)
         {
+            if (isProcessing)
+            {
+                await Task.Delay(1000, stoppingToken);
+                continue;
+            }
+        
             try
             {
+                isProcessing = true;
                 var updates = await botClient.GetUpdates(
                     offset: lastUpdateId + 1,
                     timeout: 30,
@@ -70,13 +78,17 @@ public class TelegramBotBackgroundService(
             }
             catch (ApiRequestException ex) when (ex.Message.Contains("terminated by other getUpdates"))
             {
-                Console.WriteLine("GetUpdates conflict, waiting 5s...");
-                await Task.Delay(5000, stoppingToken);
+                Console.WriteLine("GetUpdates conflict, increasing delay...");
+                await Task.Delay(10000, stoppingToken);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ошибка: {ex.Message}");
-                await Task.Delay(2000, stoppingToken);
+                Console.WriteLine($"Unhandled error: {ex.Message}");
+                await Task.Delay(5000, stoppingToken);
+            }
+            finally
+            {
+                isProcessing = false;
             }
         }
     }
@@ -98,26 +110,43 @@ public class TelegramBotBackgroundService(
     /// </remarks>
     private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        if (update.Message is not {} message) return;
-        if (message.Text is not {} messageText) return;
-    
-        var chatId = message.Chat.Id;
-        Console.WriteLine($"Сообщение: {messageText} отправлено в чат: {chatId} пользователем: {message.From?.Username}");
-
-        if (messageText.StartsWith($"/"))
+        try
         {
-            await router.HandleCommandAsync(botClient, message, cancellationToken);
-            return;
+            if (update.Message is not {} message) return;
+            if (message.Text is not {} messageText) return;
+    
+            var chatId = message.Chat.Id;
+            Console.WriteLine($"Сообщение: {messageText} отправлено в чат: {chatId} пользователем: {message.From?.Username}");
+
+            if (messageText.StartsWith($"/"))
+            {
+                await router.HandleCommandAsync(botClient, message, cancellationToken);
+                return;
+            }
+        
+            const string text = "Я не понимаю твое сообщение, чтобы узнать как пользоваться моим функционалом напиши /help";
+        
+            await botClient.SendMessage(
+                chatId: chatId,
+                text: text,
+                cancellationToken: cancellationToken);
+        
+            await lastMessageService.StoreLastMessage(message.Chat.Id, text);
         }
-        
-        const string text = "Я не понимаю твое сообщение, чтобы узнать как пользоваться моим функционалом напиши /help";
-        
-        await botClient.SendMessage(
-            chatId: chatId,
-            text: text,
-            cancellationToken: cancellationToken);
-        
-        await lastMessageService.StoreLastMessage(message.Chat.Id, text);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка обработки сообщения: {ex}");
+            // Попытка отправить сообщение об ошибке пользователю
+            try
+            {
+                await botClient.SendMessage(
+                    chatId: update.Message!.Chat.Id,
+                    text: "⚠️ Произошла внутренняя ошибка. Попробуйте позже.",
+                    cancellationToken: cancellationToken
+                );
+            }
+            catch { /* Игнорируем вторичные ошибки */ }
+        }
     }
 
     /// <summary>
