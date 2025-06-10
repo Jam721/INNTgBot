@@ -3,6 +3,7 @@ using InnTgBot.Commands;
 using InnTgBot.Options;
 using InnTgBot.Services;
 using InnTgBot.Services.Interfaces;
+using Microsoft.AspNetCore.Builder;
 
 var builder = Host.CreateApplicationBuilder(args);
 var services = builder.Services;
@@ -40,4 +41,13 @@ services.Configure<TelegramOptions>(configuration.GetSection(TelegramOptions.Tel
 services.Configure<DadataOptions>(configuration.GetSection(DadataOptions.Dadata));
 
 var host = builder.Build();
-host.Run();
+var hostTask = host.RunAsync();
+
+var webApp = WebApplication.CreateBuilder(args).Build();
+webApp.MapGet("/", () => {
+    Console.WriteLine($"[{DateTime.UtcNow}] Health check passed");
+    return "Bot is running";
+});
+webApp.Run("http://0.0.0.0:8080");
+
+await hostTask;

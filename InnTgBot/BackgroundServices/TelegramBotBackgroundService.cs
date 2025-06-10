@@ -48,12 +48,21 @@ public class TelegramBotBackgroundService(
         
         var botClient = new TelegramBotClient(_telegramOptions.Token);
 
-        while (!stoppingToken.IsCancellationRequested)
+        try
         {
-            await botClient.ReceiveAsync(
-                updateHandler: HandleUpdateAsync, 
-                errorHandler: HandleErrorAsync, 
-                cancellationToken: stoppingToken);
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await botClient.ReceiveAsync(
+                    updateHandler: HandleUpdateAsync, 
+                    errorHandler: HandleErrorAsync, 
+                    cancellationToken: stoppingToken);
+            }
+        
+            await Task.Delay(1000, stoppingToken);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 

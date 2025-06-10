@@ -17,4 +17,5 @@ RUN dotnet publish "InnTgBot.csproj" -c Release -o /app/publish /p:UseAppHost=fa
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+EXPOSE 8080
 ENTRYPOINT ["dotnet", "InnTgBot.dll"]
